@@ -1,0 +1,29 @@
+-# coding:utf-8
+%div.row-fluid
+  %h2 タスク管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li
+        %a{ href: "/tasks/" } タスク一覧
+      %li
+        %a{ href: "/tasks/new" }
+          %i.icon-edit
+          新規登録
+      %li
+        %a{ href: "/tasks/my" } 自分のタスク
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } 完了済タスク
+    %p 完了済みタスクを表示します。
+    %div.row-fluid
+      %div.span12
+      - unless @tasks.nil?
+        %table.table.table-striped
+          - @tasks.each do |task|
+            %tr
+              %td{ width: "20%" }= link_to task.deadline.strftime('%Y-%m-%d %H:%M'), task
+              %td{ width: "60%" }
+                %a{ href: "/tasks/#{task.id}" }
+                  【#{task.campaign.code}】  #{task.name}
+                  %span.badge{ style: "background-color: #{task.priority.design}" }= task.priority.name
+              %td{ width: "20%" }= link_to task.user.name, task
+        = paginate @tasks      

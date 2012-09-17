@@ -1,0 +1,14 @@
+-# coding: utf-8
+%div.row-fluid
+  %h2 顧客管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li
+        %a{ href: "/customers/" } 顧客一覧
+      %li.active
+        %a{ href: "/customers/new" }
+          %i.icon-edit
+          新規登録
+    %div.row-fluid
+      %div.span12
+        = render 'form'

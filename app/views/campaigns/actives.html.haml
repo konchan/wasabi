@@ -1,0 +1,22 @@
+%div.row-fluid
+  %h2 案件管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li
+        %a{ href: "/campaigns/" } 案件一覧
+      %li
+        %a{ href: "/campaigns/new" }
+          %i.icon-edit
+          新規登録
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } アクティブ案件一覧
+      %li
+        %a{ href: "/campaigns/pendings" } 保留案件一覧
+      %li
+        %a{ href: "/campaigns/closed" } 終了案件一覧
+    %div.row-fluid
+      %div.span12
+        -#= select_tag 'params[:kind_id]', options_from_collection_for_select(Kind.all, :id, :name)
+        -#%br
+        %div#refreshable
+          = render 'campaign_list', :campaigns => @campaigns

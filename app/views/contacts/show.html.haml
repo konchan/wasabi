@@ -1,0 +1,54 @@
+-# coding:utf-8
+%div.row-fluid
+  %h2 担当者管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li
+        %a{ href: "/contacts/" } 担当者一覧
+      %li
+        %a{ href: "/contacts/new" }
+          %i.icon-edit
+          新規登録
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } 担当者詳細
+    %div.row-fluid
+      %div.span12
+        %div#accordion2.accordion
+          %div.accordion-group
+            %div.accordion-heading
+              %div.accordion-toggle{ "data-toggle" => "collapse", "data-parent" => "#accordion2" }
+                =@contact.name
+            %div.accordion-body.collapse.in{ id: "collapse1" }
+              %div.accordion-inner
+                %table.table.table-striped
+                  %tbody
+                    %tr
+                      %td{ width: 100 } 会社名
+                      %td
+                        %a{ href: "/customers/#{@contact.customer_id}" }= @contact.customer.name
+                    %tr
+                      %td{ width: 100 } 所属
+                      %td= @contact.affiliation
+                    %tr
+                      %td{ width: 100 } タイトル
+                      %td= @contact.title
+                    %tr
+                      %td{ width: 100 }
+                        %a メールアドレス
+                      %td
+                        %a{ href: "mailto:#{@contact.email}" }= @contact.email
+                    %tr
+                      %td{ width: 100 } 電話番号
+                      %td= @contact.phone
+                    %tr
+                      %td 備考
+                      %td= @contact.description
+                %div.row-fluid
+                  %div.span10
+                    %form{ method: "get", action: "/campaigns/new/#{@contact.id}" }
+                      %fieldset
+                        %input.btn.btn-small.btn-info{ value: "案件を登録する", type: "submit" }
+                  %div.span2
+                    %div{ align: "right" }
+                      = link_to '編集', edit_contact_path(@contact), :class => "btn btn-small btn-primary"
+                      = link_to '削除', @contact, :confirm => '本当によろしいですか？', :method => :delete, :class => "btn btn-small btn-danger"

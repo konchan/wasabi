@@ -1,0 +1,105 @@
+-# coding:utf-8
+%div.row-fluid
+  %h2 活動記録
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li= link_to "活動一覧", activities_path
+      %li
+        %a{ href: "/activities/new" }
+          %i.icon-edit
+          新規登録
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } 活動詳細
+      %li
+        %a{ href: "/activities/planned" }
+          %i.icon-calendar
+          活動予定
+    %div.row-fluid
+      %div.span12
+        %div#accordion2.accordion
+          %div.accordion-group
+            %div.accordion-heading
+              %div.accordion-toggle{ "data-toggle" => "collapse", "data-parent" => "#accordion2", href: "#collapse1" }
+                [ #{@activity.campaign.code} ] ##{@activity.number} #{@activity.name}
+                %span.badge{ style: "background-color: #{@activity.action_kind.design}" }= @activity.action_kind.name
+            %div.accordion-body.collapse.in{ id: "collapse1" }
+              %div.accordion-inner
+                %table.table.table-striped
+                  %tbody
+                    %tr
+                      %td{ width: 50 } 案件
+                      %td
+                        %a{ href: "/campaigns/#{@activity.campaign.id}" } [ #{@activity.campaign.code} ] #{@activity.campaign.name}
+                      %td{ width: 50 } 顧客名
+                      %td= @activity.campaign.customer.name
+                    %tr
+                      %td{ width: 50 }
+                        - if @activity.date > Time.now
+                          予定日
+                        - else
+                          活動日 
+                      %td{ width: 300 }= @activity.date.strftime('%Y-%m-%d %H:%M')
+                      %td{ width: 50 }
+                        - if @activity.date > Time.now
+                          設定者
+                        - else
+                          報告者
+                      %td= @activity.user.name
+                    %tr
+                      %td 詳細
+                      %td{ colspan: 3 }= simple_format @activity.detail
+                %div.row-fluid
+                  %div.span10
+                    - unless @activity.campaign.closed?
+                      = link_to 'タスクを登録する', "/tasks/new/#{@activity.id}", class: 'btn btn-small btn-info'
+                      = link_to '活動にコメントする', "#comment1", "data-toggle" => "modal", class: 'btn btn-small btn-info'
+                  %div.span2
+                    %div{ align: "right" }
+                      = link_to '編集', edit_activity_path(@activity), class: "btn btn-small btn-primary"
+                      = link_to '削除', @activity, confirm: '活動記録を削除します。この活動を削除すると、この活動に関連するタスク、コメントも一緒に削除されます。本当によろしいですか？', method: :delete, class: "btn btn-small btn-danger"
+                %div.row-fluid
+                  %div.span6
+                    %br
+                    %h5 本活動に関連するタスク一覧
+                    %ul
+                    - if @tasks.nil? || @tasks.empty?
+                      %li 本活動に関連するタスクはありません
+                    - else
+                      - @tasks.each do |tsk|
+                        %li
+                          %a{ href: "/tasks/show/#{tsk.id}" }
+                            = "#{tsk.name}  -- #{tsk.created_at}" 
+                  %div.span6
+                    %br
+                    %h5 活動に対するコメント
+                    %ul
+                    - if @comments.empty?
+                      %li
+                        コメントはありません
+                    - else
+                      - @comments.each do |cmt|
+                        %li
+                          %a{ href: "#commented#{cmt.id}", "data-toggle" => "modal" }
+                            = "#{cmt.title} @ #{cmt.user.name}  -- #{cmt.updated_at.strftime('%Y-%m-%d %H:%M')}"
+                        %div.modal.hide.fade{ id: "commented#{cmt.id}" }
+                          %div.modal-header
+                            %h4= cmt.title
+                          %div.modal-body
+                            = simple_format cmt.description
+                          %div.modal-footer
+                            = link_to '削除', cmt, confirm: 'コメントを削除します。よろしいですか？', method:  :delete, class: "btn btn-small btn-danger"
+                            = link_to '閉じる', "#", "data-dismiss" => "modal", class: "btn btn-small" 
+              %div.modal.hide.fade{ id: "comment1" }
+                =form_for @comment, :url => "/comments/#{@activity.id}/create_with_id", class: "form-horizontal" do |f|
+                  %div.modal-header
+                    %h3 コメント登録
+                  %div.modal-body
+                    %h4 タイトル
+                    = f.text_field :title, class: "input-xxlarge"
+                    %h4 コメント内容
+                    = f.text_area :description, class: "input-xxlarge", rows: 10
+                  %div.modal-footer
+                    %div.control-group
+                      %div.controls
+                        = f.submit "登録", class: "btn btn-primary"
+                        = link_to 'キャンセル', '#', class: :btn, "data-dismiss" => "modal"

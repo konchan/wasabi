@@ -1,0 +1,21 @@
+%h1 Listing action_kinds
+
+%table
+  %tr
+    %th Name
+    %th Design
+    %th
+    %th
+    %th
+
+  - @action_kinds.each do |action_kind|
+    %tr
+      %td= action_kind.name
+      %td= action_kind.design
+      %td= link_to 'Show', action_kind
+      %td= link_to 'Edit', edit_action_kind_path(action_kind)
+      %td= link_to 'Destroy', action_kind, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Action kind', new_action_kind_path

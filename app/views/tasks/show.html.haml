@@ -1,0 +1,100 @@
+%div.row-fluid
+  %h2 タスク管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li= link_to "タスク一覧", tasks_path
+      %li
+        %a{ href: "/tasks/new" }
+          %i.icon-edit
+          新規登録
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } タスク詳細
+      %li
+        %a{ href: "/tasks/my" } 自分のタスク
+      %li
+        %a{ href: "/tasks/finished" } 完了済タスク
+    %div.row-fluid
+      %div.span12
+        %div#accordion2.accordion
+          %div.accordion-group
+            %div.accordion-heading
+              %div.accordion-toggle{ "data-toggle" => "collapse", "data-parent" => "#accordion2", href: "#collapse1" }
+                #{@task.name} @ #{@task.user.name} 
+                %span.badge{ style: "background-color: #{@task.priority.design}" }= @task.priority.name
+            %div.accordion-body.collapse.in{ id: "collapse1" }
+              %div.accordion-inner
+                %table.table.table-striped
+                  %tbody
+                    %tr
+                      %td{ width: 120 } 関連する案件
+                      %td= link_to @task.campaign.name, campaign_path(@task.campaign)
+                      %td{ width: 120 } 関連する活動
+                      %td= link_to @task.activity.name, activity_path(@task.activity)
+                    %tr
+                      %td{ width: 120 } タスク登録日
+                      %td= @task.started_at
+                      %td{ width: 120 } 締め切り日
+                      %td= @task.deadline.strftime('%Y-%m-%d %H:%M')
+                    %tr
+                      %td{ width: 120 } タスク詳細
+                      %td{ colspan: 3 }= simple_format @task.detail
+                %div.row-fluid
+                  %div.span4
+                    - unless @task.closed_at || @task.campaign.closed?
+                      = link_to 'タスクにコメントする', '#comment1', "data-toggle" => "modal", class: 'btn btn-small btn-info'
+                      %div.modal.hide.fade{ id: "comment1" }
+                        =form_for @comment, :url => "/comments/#{@task.id}/create_with_id" do |f|
+                          %div.modal-header
+                            %h3 コメント登録
+                          %div.modal-body
+                            %h4 タイトル
+                            = f.text_field :title, class: "input-xxlarge"
+                            %h4 コメント内容
+                            = f.text_area :description, class: "input-xxlarge", :rows => 10
+                          %div.modal-footer
+                            %div.control-group
+                              %div.controls
+                                = f.submit "登録", class: "btn btn-primary"
+                                = link_to 'キャンセル', '#', class: :btn, "data-dismiss" => "modal"
+                  %div.span4
+                    - unless @task.closed_at
+                      %div{ align: "center" }
+                        %a.btn.btn-small.btn-warning{ href: "#finish1", "data-toggle" => "modal" } タスクを完了する
+                  %div.span4
+                    %div{ align: "right" }
+                      = link_to '編集', edit_task_path(@task), class: "btn btn-small btn-primary"
+                      = link_to '削除', @task, confirm: 'タスクを削除します。このタスクを削除すると、このタスクに関連するコメントも削除されます。本当によろしいですか？', method: :delete, class: "btn btn-small btn-danger"
+                  %div.row-fluid
+                    %div.span12 
+                      %br
+                      %h5
+                        本タスクへのコメント
+                      %ul
+                        - if @comments.empty?
+                          %li 本タスクへのコメントはありません
+                        - else
+                          - @comments.each do |cmt|
+                            %li
+                              %a{ href: "#commented#{cmt.id}", "data-toggle" => "modal" }
+                                = "#{cmt.title} @#{cmt.user.name} -- #{cmt.updated_at.strftime('%Y-%m-%d %H:%M:%S')}"
+                            %div.modal.hide.fade{ id: "commented#{cmt.id}" }
+                              %div.modal-header
+                                %h4= cmt.title
+                              %div.modal-body
+                                = simple_format cmt.description
+                              %div.modal-footer
+                                = link_to '削除', cmt, confirm: 'コメントを削除します。よろしいですか？', method: :delete, class: "btn btn-small btn-danger"
+                                = link_to '閉じる', '#', class: "btn btn-small", "data-dismiss" => "modal"
+              %div.modal.hide.fade{ id: "finish1" }
+                =form_for @task do |f|
+                  %div.modal-header
+                    %h3 タスク完了登録
+                  %div.modal-body
+                    %div.control-group
+                      %label.control-label 完了日
+                      %div.controls= f.text_field :closed_at, :id => "datetimepicker", class: "input-xlarge", value: DateTime.now.strftime('%Y-%m-%d')
+                  %div.modal-footer
+                    %div.control-group
+                      %div.controls
+                        = f.submit "完了", class: "btn btn-primary"
+                        = link_to 'キャンセル', '#', class: :btn, "data-dismiss" => "modal"

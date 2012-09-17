@@ -1,0 +1,34 @@
+-# coding:utf-8
+%div.row-fluid
+  %h2 活動記録
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li
+        %a{ href: "/activities/" } 活動一覧
+      %li
+        %a{ href: "/activities/new" }
+          %i.icon-edit
+          新規登録
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" }
+          %i.icon-calendar
+          活動予定
+    %div.row-fluid
+      %div.span12
+        - cnt = 0
+        - unless @activities.nil?
+          - @activities.each_with_index do |activities, idx|
+            %div.row-fluid
+              %div.span12
+                %table.table.table-striped
+                  %tr
+                    %th{ colspan: 3 }= get_planned_activities_title(idx)
+                  - if activities.empty?
+                    %tr
+                      %td{ colspan: 3 } 予定はありません
+                  - else
+                    - activities.each do |act|
+                      %tr
+                        %td{ width: "20%" }= link_to act.date.strftime('%Y-%m-%d %H:%M'), act
+                        %td{ width: "60%" }= link_to "#{act.campaign.code}  ##{act.number} #{act.name}", act
+                        %td{ width: "20%" }= link_to act.user.name, act

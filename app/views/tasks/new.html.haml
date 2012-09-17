@@ -1,0 +1,18 @@
+-# coding: utf-8
+%div.row-fluid
+  %h2 タスク管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li
+        %a{ href: "/tasks/" } タスク一覧
+      %li.active
+        %a{ href: "/tasks/new" }
+          %i.icon-edit
+          新規登録
+      %li
+        %a{ href: "/tasks/my" } 自分のタスク
+      %li
+        %a{ href: "/tasks/finished" } 完了済タスク
+    %div.row-fluid
+      %div.span12
+        = render 'form'

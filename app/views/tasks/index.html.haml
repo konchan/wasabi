@@ -1,0 +1,35 @@
+%div.row-fluid
+  %h2 タスク管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } タスク一覧
+      %li
+        %a{ href: "/tasks/new" }
+          %i.icon-edit
+          新規登録
+      %li
+        %a{ href: "/tasks/my" } 自分のタスク
+      %li
+        %a{ href: "/tasks/finished" } 完了済タスク
+    %p 未完了タスクを表示します。
+    - cnt = 0
+    - unless @tasks.nil?
+      - @tasks.each_with_index do |tasks, idx|
+        %div.row-fluid
+          %div.span12
+            %table.table.table-striped
+              %tr
+                %th{ colspan: 3 }= get_title(idx)
+              - if tasks.empty?
+                %tr
+                  %td{ colspan: 3 }= get_comment(idx)
+              - else
+                - tasks.each do |task|
+                  %tr
+                    %td{ width: "20%" }= link_to task.deadline.strftime('%Y-%m-%d %H:%M'), task
+                    %td{ width: "60%" }
+                      %a{ href: "/tasks/#{task.id}" }
+                        【#{task.campaign.code}】  #{task.name}
+                        %span.badge{ style: "background-color: #{task.priority.design}" }= task.priority.name
+                    %td{ width: "20%" }= link_to task.user.name, task                      

@@ -1,0 +1,33 @@
+= form_for @activity, html: {class: "form-horizontal"} do |f|
+  -if @activity.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@activity.errors.count, "error")} prohibited this activity from being saved:"
+      %ul
+        - @activity.errors.full_messages.each do |msg|
+          %li= msg
+  %fieldset
+    %div.control-group
+      %label.control-label 関連する顧客
+      %div.controls= select_tag :activity_customer_id, options_from_collection_for_select(Customer.not_bti, :id, :name)
+    %div.control-group
+      %label.control-label 案件名
+      %div.controls= f.collection_select :campaign_id, @campaigns, :id, :name, :class => "input-xlarge"
+    %div.control-group
+      %label.control-label 案件フェーズ
+      %div.controls= f.collection_select :phase_id, Phase.all, :id, :name, :class => "input-xlarge"
+    %div.control-group
+      %label.control-label 活動種別
+      %div.controls= f.collection_select :action_kind_id, ActionKind.all, :id, :name, :class => "input-xlarge"
+    %div.control-group
+      %label.control-label 活動名
+      %div.controls= f.text_field :name, :class => "input-xlarge"
+    %div.control-group
+      %label.control-label 活動日
+      %div.controls= f.text_field :date, :id => "datetimepicker", :class => "input-xlarge", :value => DateTime.now.strftime('%Y-%m-%d %H:%M')
+    %div.control-group
+      %label.control-label 詳細
+      %div.controls= f.text_area :detail, :class => "input-xxlarge", :rows => 15
+    %div.control-group
+      %div.controls
+        = f.submit "登録", :class => "btn btn-primary"
+        = f.submit "キャンセル", :onclick => "window.location='/activities/';return false", :class => :btn

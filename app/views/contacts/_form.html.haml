@@ -1,0 +1,35 @@
+-# coding:utf-8
+= form_for @contact, html: {class: "form-horizontal"} do |f|
+  -if @contact.errors.any?
+    .alert.alert-error
+      %h3= "#{pluralize(@contact.errors.count, "error")} prohibited this contact from being saved:"
+      %ul
+        - @contact.errors.full_messages.each do |msg|
+          %li= msg
+
+  %fieldset
+    %div.control-group
+      %label.control-label 顧客名
+      %div.controls= f.collection_select :customer_id, @customers, :id, :name, class: "input-xlarge"
+    %div.control-group
+      %label.control-label 担当者名
+      %div.controls= f.text_field :name, class: "input-xlarge"
+    %div.control-group
+      %label.control-label 肩書き
+      %div.controls= f.text_field :title, class: "input-xlarge"
+    %div.control-group
+      %label.control-label 所属組織
+      %div.controls= f.text_area :affiliation, class: "input-xlarge", rows: 3
+    %div.control-group
+      %label.control-label メールアドレス
+      %div.controls= f.text_field :email, class: "input-xlarge"
+    %div.control-group
+      %label.control-label 電話番号
+      %div.controls= f.text_field :phone, class: "input-xlarge"
+    %div.control-group
+      %label.control-label 備考
+      %div.controls= f.text_area :description, class: "input-xlarge", rows: 3
+    %div.control-group
+      %div.controls
+        = f.submit "登録", class: "btn btn-primary"
+        = f.submit "キャンセル", onclick: "window.location='/contacts/';return false", class: :btn

@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @action_kind.name
+%p
+  %b Design:
+  = @action_kind.design
+
+= link_to 'Edit', edit_action_kind_path(@action_kind)
+\|
+= link_to 'Back', action_kinds_path

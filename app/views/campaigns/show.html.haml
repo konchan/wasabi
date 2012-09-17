@@ -1,0 +1,229 @@
+-# coding:utf-8
+%div.row-fluid
+  %h2 案件管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li= link_to "案件一覧", campaigns_path
+      %li
+        %a{ href: "/campaigns/new" }
+          %i.icon-edit
+          新規登録
+      %li
+        %a{ href: "/campaigns/actives" } アクティブ案件一覧
+      %li
+        %a{ href: "/campaigns/pendings" } 保留案件一覧
+      %li
+        %a{ href: "/campaigns/closed" } 終了案件一覧
+      %li
+        %a{ href: "/campaigns/no_act_for_three_months" } 3ヶ月以上アクションがない案件一覧
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } 案件詳細
+    %div.row-fluid
+      %div.span12
+        %div#accordion2.accordion
+          %div.accordion-group
+            %div.accordion-heading
+              %div.accordion-toggle
+                =@campaign.code 
+                =@campaign.name
+                %span.badge{ style: "background-color: #{@campaign.kind.design}" }= @campaign.kind.name
+                - unless @campaign.accuracy.nil?
+                  %span.badge{ style: "background-color: #{@campaign.accuracy.design}" }= @campaign.accuracy.name
+                - if @campaign.closed?
+                  %span.badge{ style: 'background-color: #999999' } 終了
+                - elsif @campaign.pending?
+                  %span.badge{ style: 'background-color: #C0C966' } 保留中
+                - else
+                  %span.badge{ style: 'background-color: #1E9AD7' } 進行中
+            %div.accordion-body.collapse.in
+              %div.accordion-inner
+                %table.table.table-striped
+                  %tbody
+                    %tr
+                      %td 顧客名
+                      %td{ colspan: 3 }
+                        %a{ href: "/customers/#{@campaign.customer.id}", rel: "popover", title: "説明", "data-content" => "#{@campaign.customer.name}で案件を絞り込みます。" }= @campaign.customer.name
+                    %tr
+                      %td 顧客担当者
+                      %td
+                        %a{ href: "/contacts/#{@campaign.contact.id}" }= @campaign.contact.name
+                      %td 案件推進者
+                      %td= @campaign.user.name
+                    %tr
+                      %td{ width: "25%" } 開始日
+                      %td{ width: "25%" }= @campaign.started_at
+                      %td{ width: "25%" } 終了日
+                      %td{ width: "25%" }
+                        - if @campaign.closed?
+                          = @campaign.closed_at.strftime('%Y-%m-%d')
+                        - else
+                          ー
+                    - if @campaign.term1
+                      %tr
+                        %td{ width: "25%" } 提案期間
+                        %td{ colspan: 3 }
+                          = @campaign.term1.strftime('%Y-%m-%d')
+                          　〜　
+                          = @campaign.term2.strftime('%Y-%m-%d')
+                    - if @campaign.closed?
+                      %tr
+                        %td 最終案件ステータス
+                        %td{ colspan: 3 } ー
+                        -#= @campaign.status_tag.name
+                    %tr
+                      %td
+                        - case @campaign.accuracy.name
+                        - when /Commit/
+                          受注時期・期間
+                        - when /Drop/
+                          提案時期
+                        - else
+                          目標受注時期
+                      %td= @campaign.get_period
+                      %td
+                        - case @campaign.accuracy.name
+                        - when /Commit/
+                          受注額
+                        - when /Drop/
+                          提案金額
+                        - else
+                          目標受注額
+                      %td= to_currency(@campaign.get_amount.to_i)
+                    %tr
+                      %td 備考
+                      %td{ colspan: 3 }= @campaign.description
+                %div{ align: "right" }
+                %div.row-fluid
+                  %div.span6
+                    - unless @campaign.closed? || @campaign.pending?
+                      = link_to '活動を登録する', "/activities/new/#{@campaign.id}", class: 'btn btn-small btn-info'
+                      = link_to 'タスクを登録する', "/tasks/new/#{@campaign.id}", class: 'btn btn-small btn-info'
+                      = link_to '案件にコメントする', "#comment", "data-toggle" => "modal", class: 'btn btn-small btn-info'
+                  %div.span4
+                    %div{ align: "right" }
+                      - unless @campaign.closed? || @campaign.pending?
+                        = link_to '案件を終了する', '#finish', "data-toggle" => "modal", class: 'btn btn-small btn-warning'
+                      - unless @campaign.closed?
+                        - if @campaign.pending?
+                          = link_to '案件を再開する', '#proseed', "data-toggle" => "modal", class: 'btn btn-small btn-warning'
+                        - else
+                          = link_to '案件を保留にする', '#pending', "data-toggle" => "modal", class: 'btn btn-small btn-warning'
+                  %div.span2
+                    %div{ align: "right" }
+                      = link_to '編集', edit_campaign_path(@campaign), class: "btn btn-small btn-primary"
+                      = link_to '削除', @campaign, confirm:  '案件を削除します。案件を削除すると、本案件に関連する活動記録、タスクも一緒に削除されます。本当によろしいですか？', method:  :delete, class: "btn btn-small btn-danger"
+                %div.row-fluid
+                  %div.span6
+                    - unless @campaign.closed?
+                      %br
+                      %h5 次の予定
+                      %ul
+                      - unless @next_actions.empty?
+                        - @next_actions.each do |nact|
+                          %li
+                            %a{ href: "/activities/#{nact.id}" }
+                              = "##{nact.number} #{nact.name}  -- #{nact.date.strftime('%Y-%m-%d %H:%M')}"
+                      - else
+                        %li
+                          予定はありません（
+                          = link_to '予定を登録する', "/activities/new/#{@campaign.id}"
+                          ）
+                      %br
+                    %div.row-fluid
+                      %h5 案件に関連する活動
+                      %ul
+                      - unless @activities.empty?
+                        - @activities.each do |act|
+                          %li
+                            %a{ href: "/activities/#{act.id}" }
+                              = "##{act.number} #{act.name}  -- #{act.date.strftime('%Y-%m-%d %H:%M')}"
+                        %br
+                      - else
+                        %li
+                          登録されている活動記録はありません
+                      %br
+                      %br
+                    %div.row-fluid
+                      %h5 案件に関連するタスク
+                      %ul
+                      - unless @tasks.empty?
+                        - @tasks.each do |tsk|
+                          %li
+                            %a{ href: "/tasks/#{tsk.id}" }
+                              = "#{tsk.name}  -- #{tsk.deadline.strftime('%Y-%m-%d %H:%M')}"
+                        %br
+                      - else
+                        %li 登録されているタスクはありません
+                  %div.span6
+                    %br
+                    %h5 案件に対するコメント
+                    %ul
+                    - if @comments.empty?
+                      %li コメントはありません
+                    - else
+                      - @comments.each do |cmt|
+                        %li= link_to "#{cmt.title} @ #{cmt.user.name}  -- #{cmt.updated_at.strftime('%Y-%m-%d %H:%M')}", "#commented#{cmt.id}", "data-toggle" => "modal"
+                        %div.modal.hide.fade{ id: "commented#{cmt.id}" }
+                          %div.modal-header
+                            %h4= cmt.title
+                          %div.modal-body
+                            = simple_format cmt.description
+                          %div.modal-footer
+                            = link_to '削除', cmt, :confirm => 'コメントを削除します。よろしいですか？', :method => :delete, class: "btn btn-small btn-danger"
+                            = link_to '閉じる', '#', class: "btn btn-small", "data-dismiss" => "modal"
+                        
+              %div.modal.hide.fade{ id: "comment" }
+                =form_for @comment, url: "/comments/#{@campaign.id}/create_with_id" do |f|
+                  %div.modal-header
+                    %h3 コメント登録
+                  %div.modal-body
+                    %h4 タイトル
+                    = f.text_field :title, class: "input-xxlarge"
+                    %h4 コメント内容
+                    = f.text_area :description, class: "input-xxlarge", :rows => 10
+                  %div.modal-footer
+                    %div.control-group
+                      %div.controls
+                        = f.submit "登録", class: "btn btn-primary"
+                        = link_to 'キャンセル', '#', class: :btn, "data-dismiss" => "modal"
+                        
+              %div.modal.hide.fade{ id: "finish" }
+                =form_for @campaign do |f|
+                  %div.modal-header
+                    %h3 案件終了登録
+                  %div.modal-body
+                    %p 案件を終了します。以下を登録してください。
+                    %fieldset
+                      %div.control-group
+                        %label.control-label 終了日
+                        %div.controls= f.text_field :closed_at, id: "datepicker", class: "input-xlarge", :value => DateTime.now.strftime('%Y-%m-%d')
+                      %div.control-group
+                        %label.control-label 最終案件ステータス
+                        %div.controls= f.collection_select :accuracy_id, Accuracy.in(name: ["Commit", "Drop"]), :id, :name, class: "input-xlarge"
+                  %div.modal-footer
+                    %div.control-group
+                      %div.controls
+                        = f.submit "登録", class: "btn btn-primary"
+                        = link_to 'キャンセル', '#', class: :btn, "data-dismiss" => "modal"
+                        
+              %div.modal.hide.fade{ id: "pending" }
+                %div.modal-header
+                  %h3 案件保留登録
+                %div.modal-body
+                  %p 案件を一時保留にします。よろしいですか？
+                %div.modal-footer
+                  %div.control-group
+                    %div.controls
+                      = link_to '案件を保留にする', "/campaigns/#{@campaign.id}/pending", method: :post, class: "btn btn-small btn-warning"
+                      = link_to 'キャンセル', '#', class: :btn, "data-dismiss" => "modal"
+
+              %div.modal.hide.fade{ id: "proseed" }
+                %div.modal-header
+                  %h3 案件再開
+                %div.modal-body
+                  %p 案件を再開します。よろしいですか？
+                %div.modal-footer
+                  %div.control-group
+                    %div.controls
+                      = link_to '案件を再開する', "/campaigns/#{@campaign.id}/proseed", method: :post, class: "btn btn-small btn-warning"
+                      = link_to 'キャンセル', '#', class: :btn, "data-dismiss" => "modal"

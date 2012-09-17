@@ -1,0 +1,16 @@
+= form_for @action_kind, html: {class: "form-horizontal"} do |f|
+  -if @action_kind.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@action_kind.errors.count, "error")} prohibited this action_kind from being saved:"
+      %ul
+        - @action_kind.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :design
+    = f.text_field :design
+  .actions
+    = f.submit 'Save'

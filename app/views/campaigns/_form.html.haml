@@ -1,0 +1,49 @@
+= form_for @campaign, html: {name: "campaigns1", class: "form-horizontal"} do |f|
+  -if @campaign.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@campaign.errors.count, "error")} prohibited this campaign from being saved:"
+      %ul
+        - @campaign.errors.full_messages.each do |msg|
+          %li= msg
+
+  %fieldset
+    %div.control-group
+      %label.control-label 顧客名
+      %div.controls= f.collection_select :customer_id, @customers, :id, :name
+    %div.control-group
+      %label.control-label 案件種別
+      %div.controls= f.collection_select :kind_id, Kind.not_all, :id, :name, {}, {onChange: "entryChange1()"}
+    %div.control-group
+      %label.control-label 顧客側担当者
+      %div.controls= f.collection_select :contact_id, @contacts, :id, :name
+    %div.control-group
+      %label.control-label 案件推進者
+      %div.controls= f.collection_select :user_id, User.all, :id, :name, :selected => current_user
+    %div.control-group
+      %label.control-label 案件名
+      %div.controls= f.text_field :name, :class => "input-xlarge"
+    %div.control-group
+      %label.control-label 開始日
+      %div.controls= f.text_field :started_at, :id => "datepicker", :class => "input-xlarge", :value => DateTime.now.strftime('%Y-%m-%d')
+    %div.control-group#selectiveField
+      %label.control-label 提案期間
+      %div.controls
+        = f.text_field :term1, :id => "datepicker2"
+        〜
+        = f.text_field :term2, :id => "datepicker3"
+    %div.control-group
+      %label.control-label 目標受注時期
+      %div.controls= f.text_field :period, :id => "datepicker4", :class => "input-xlarge"
+    %div.control-group
+      %label.control-label 目標受注額
+      %div.controls= f.text_field :amount, :class => "input-xlarge"
+    %div.control-group
+      %label.control-label 受注確度
+      %div.controls= f.collection_select :accuracy_id, Accuracy.all, :id, :name
+    %div.control-group
+      %label.control-label 備考
+      %div.controls= f.text_area :description, :class => "input-xlarge", :rows => 3
+    %div.control-group
+      %div.controls
+        = f.submit "登録", :class => "btn btn-primary"
+        = f.submit "キャンセル", :onclick => "window.location='/campaigns/';return false", :class => :btn

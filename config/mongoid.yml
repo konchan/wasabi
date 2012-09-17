@@ -21,6 +21,7 @@ development:
         consistency: :strong
   # Configure Mongoid specific options. (optional)
   options:
+    use_activesupport_time_zone: true
     # Configuration for whether or not to allow access to fields that do
     # not have a field definition on the model. (default: true)
     # allow_dynamic_fields: true

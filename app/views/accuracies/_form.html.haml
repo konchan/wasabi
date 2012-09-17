@@ -1,0 +1,16 @@
+= form_for @accuracy do |f|
+  -if @accuracy.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@accuracy.errors.count, "error")} prohibited this accuracy from being saved:"
+      %ul
+        - @accuracy.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :design
+    = f.text_field :design
+  .actions
+    = f.submit 'Save'

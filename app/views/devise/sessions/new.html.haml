@@ -1,0 +1,6 @@
+%div.row-fluid
+  %table
+    %tr
+      %td{ width: "140", align: "center" }
+        %h4 Sign in with
+      %td= link_to image_tag('google_logo.jpeg', mouseover: 'google_logo_over.jpeg', size: "174x73", border: 1), user_omniauth_authorize_path(:google)

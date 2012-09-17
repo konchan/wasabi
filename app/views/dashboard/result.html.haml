@@ -1,0 +1,7 @@
+%div.row-fluid
+  %h2 検索結果
+%div.row-fluid
+  %div.span12
+    %p 案件管理から #{@campaigns.count} 件 該当案件が見つかりました。
+    %div#refreshable
+      = render 'campaign_list', :campaigns => @campaigns

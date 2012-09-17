@@ -1,0 +1,22 @@
+-# coding: utf-8
+%div.row-fluid
+  %h2 案件管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li
+        %a{ href: "/campaigns/" } 案件一覧
+      %li
+        %a{ href: "/campaigns/new" }
+          %i.icon-edit
+          新規登録
+      %li.active
+        %a{ href: "#", "data-toggle" => "tab" } 案件詳細（編集）
+      %li
+        %a{ href: "/campaigns/actives" } アクティブ案件一覧
+      %li
+        %a{ href: "/campaigns/pendings" } 保留案件一覧
+      %li
+        %a{ href: "/campaigns/closed" } 終了案件一覧
+    %div.row-fluid
+      %div.span12
+        = render 'form'

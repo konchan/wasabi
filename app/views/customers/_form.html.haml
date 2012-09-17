@@ -1,0 +1,36 @@
+-# coding:utf-8
+= form_for @customer, html: {class: "form-horizontal"} do |f|
+  -if @customer.errors.any?
+    .alert.alert-error
+      %h3= "#{pluralize(@customer.errors.count, "error")} prohibited this customer from being saved:"
+      %ul
+        - @customer.errors.full_messages.each do |msg|
+          %li= msg
+
+  %fieldset
+    %div.control-group
+      %label.control-label 顧客コード
+      %div.controls
+        = f.text_field :code, :class => "input-xlarge"
+        = link_to image_tag('info_32-blue.png', width: "24", height: "24"), "#", id: "exp-code", rel: 'tooltip', title: "顧客コードはアルファベット大文字3文字で入力してください。"
+    %div.control-group
+      %label.control-label 顧客名
+      %div.controls= f.text_field :name, :class => "input-xlarge"
+    %div.control-group
+      %label.control-label 住所
+      %div.controls= f.text_field :address, :class => "input-xlarge"
+    %div.control-group
+      %label.control-label URL
+      %div.controls= f.text_field :url, :class => "input-xlarge"
+    %div.control-group
+      %label.control-label 紹介元
+      %div.controls
+        = f.text_field :referral, :class => "input-xlarge"
+        = link_to image_tag('info_32-blue.png', width: "24", height: "24"), "#", id: "exp-code", rel: 'tooltip', title: "紹介元は、「蔵元さん」「川上さん」他、Web経由やSIerさん（SIerさん名）の紹介などを記載します。"
+    %div.control-group
+      %label.control-label 備考
+      %div.controls= f.text_area :description, :class => "input-xlarge", :rows => 3
+    %div.control-group
+      %div.controls
+        = f.submit "登録", :class => "btn btn-primary"
+        = f.submit "キャンセル", :onclick => "window.location='/customers/';return false", :class => :btn

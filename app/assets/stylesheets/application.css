@@ -9,5 +9,23 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require bootstrap1
+ *= require bootstrap-responsive
+ *= require jquery-ui-1.8.23.custom
+ *= require jquery.timepicker
  *= require_tree .
  */
+
+#table {
+    display:table; 
+    }
+.row {
+    display:table-row;
+    border-bottom:1px solid #CCC;
+    }
+.row>div {
+    display:table-cell;
+    margin:5px;
+    padding:5px;
+    background-color:#eee;
+}

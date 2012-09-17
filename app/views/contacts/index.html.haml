@@ -1,0 +1,26 @@
+%div.row-fluid
+  %h2 担当者管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } 担当者一覧
+      %li
+        %a{ href: "/contacts/new" }
+          %i.icon-edit
+          新規登録
+    %div.row-fluid
+      %div.span12
+        %table.table.table-bordered.table-striped
+          %tr
+            %th{ width: 50  } ID
+            %th{ width: 200 } 担当者名
+            %th 顧客企業名
+          - unless @contacts.nil?
+            - @contacts.each_with_index do |contact, idx|
+              %tr
+                %td
+                  %a{ href: "/contacts/#{contact.id}" }= idx+1
+                %td
+                  %a{ href: "/contacts/#{contact.id}" }= contact.name
+                %td
+                  %a{ href: "/contacts/#{contact.id}" }= contact.customer.name

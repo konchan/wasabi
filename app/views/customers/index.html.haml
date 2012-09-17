@@ -1,0 +1,30 @@
+%div.row-fluid
+  %h2 顧客管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } 顧客一覧
+      %li
+        %a{ href: "/customers/new" }
+          %i.icon-edit
+          新規登録
+    %div.row-fluid
+      %div.span12
+        %table.table.table-bordered.table-striped
+          %tr
+            %th{ width: 50  } ID
+            %th{ width: 200 } 顧客コード
+            %th{ width: 400 } 顧客名
+            %th 総案件数
+          - unless @customers.nil?
+            - @customers.each_with_index do |customer, idx|
+              %tr
+                %td
+                  %a{ href: "/customers/#{customer.id}" }= idx+1
+                %td
+                  %a{ href: "/customers/#{customer.id}" }= customer.code
+                %td
+                  %a{ href: "/customers/#{customer.id}" }= customer.name
+                %td
+                  %a{ href: "/customers/#{customer.id}" }= customer.counter
+            = paginate @customers      

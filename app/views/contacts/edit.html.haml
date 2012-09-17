@@ -1,0 +1,16 @@
+-# coding:utf-8
+%div.row-fluid
+  %h2 担当者管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li
+        %a{ href: "/contacts/" } 担当者一覧
+      %li
+        %a{ href: "/contacts/new" }
+          %i.icon-edit
+          新規登録
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } 担当者詳細（編集）
+    %div.row-fluid
+      %div.span12
+        = render 'form'

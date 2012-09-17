@@ -1,0 +1,55 @@
+-# coding:utf-8
+%div.row-fluid
+  %h2 顧客管理
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li= link_to "顧客一覧", customers_path
+      %li
+        %a{ href: "/customers/new" }
+          %i.icon-edit
+          新規登録
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } 顧客詳細
+    %div.row-fluid
+      %div.span12
+        %div#accordion2.accordion
+          %div.accordion-group
+            %div.accordion-heading
+              %div.accordion-toggle{ "data-toggle" => "collapse", "data-parent" => "#accordion2"}
+                =@customer.name
+            %div.accordion-body.collapse.in{ id: "collapse1" }
+              %div.accordion-inner
+                %table.table.table-striped
+                  %tbody
+                    %tr
+                      %td{ width: "20%" } 顧客コード
+                      %td{ width: "30%" }= @customer.code
+                      %td{ width: "20%" } 紹介元
+                      %td= @customer.referral
+                    %tr
+                      %td{ width: "20%" } 住所
+                      %td{ colspan: 3}= @customer.address
+                    %tr
+                      %td{ width: "20%" } URL
+                      %td{ colspan: 3 }
+                        %a{ href: "#{@customer.url}" }= @customer.url
+                    %tr
+                      %td 備考
+                      %td{ colspan: 3 }= @customer.description
+                %div.row-fluid
+                  %div.span10
+                    = link_to '案件を登録する', "/campaigns/new/#{@customer.id}", class: 'btn btn-small btn-info'
+                    = link_to '担当者を登録する', "/contacts/new/#{@customer.id}", class: 'btn btn-small btn-info'
+                  %div{ align: "right" }
+                    %div.span2
+                      = link_to '編集', edit_customer_path(@customer), class: "btn btn-small btn-primary"
+                      = link_to '削除', @customer, confirm: '顧客情報を削除します。この顧客情報を削除すると、関連する担当者情報、案件情報、それに付随する活動記録、タスク、コメントもあわせて削除されます。本当によろしいですか？', method: :delete, class: "btn btn-small btn-danger"
+                  %br
+                  %br
+                %div.row-fluid
+                  %div.span12
+                    %h5 本顧客に関連する案件一覧
+                    %ul
+                      - unless @campaigns.empty?
+                        - @campaigns.each do |c|
+                          %li= link_to "#{c.name}　　[#{c.status_name}]", c

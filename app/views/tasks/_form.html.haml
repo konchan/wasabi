@@ -1,0 +1,53 @@
+= form_for @task, html: {class: "form-horizontal"} do |f|
+  -if @task.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@task.errors.count, "error")} prohibited this task from being saved:"
+      %ul
+        - @task.errors.full_messages.each do |msg|
+          %li= msg
+
+  %fieldset
+    %div.control-group
+      %label.control-label 関連する顧客
+      %div.controls= select_tag :task_customer_id, options_from_collection_for_select(Customer.not_bti, :id, :name)
+    %div.control-group
+      %label.control-label 関連する案件
+      %div.controls= f.collection_select :campaign_id, Campaign.all, :id, :name, :class => :"input-xlarge"
+    %div.control-group
+      %label.control-label 関連する活動
+      %div.controls= f.collection_select :activity_id, Activity.all, :id, :name, :class => :"input-xlarge"
+    %div.control-group
+      %label.control-label タスク名
+      %div.controls= f.text_field :name, :class => :"input-xlarge"
+    %div.control-group
+      %label.control-label 優先度（必須入力）
+      %div.controls
+        %table
+          %tr
+          - Priority.all.each do |p|
+            %td{ width: 60 }
+              %div{ align: "center" }= p.name
+          %tr
+          - Priority.all.each do |p|
+            %td
+              %div{ align: "center" }
+                - if p.name == "中"
+                  = f.radio_button :priority_id, p.id, {checked: true}
+                - else
+                  = f.radio_button :priority_id, p.id
+    %div.control-group
+      %label.control-label 開始日
+      %div.controls= f.text_field :started_at, :id => "datepicker", :class => "input-xlarge", :value => Time.now.strftime('%Y-%m-%d')
+    %div.control-group
+      %label.control-label 締め切り日
+      %div.controls= f.text_field :deadline, :id => "datetimepicker", :class => "input-xlarge", :value => DateTime.now.strftime('%Y-%m-%d %H:%M')
+    %div.control-group
+      %label.control-label 実施担当者
+      %div.controls= f.collection_select :user_id, User.all, :id, :name, :class => :"input-xlarge"
+    %div.control-group
+      %label.control-label タスク詳細
+      %div.controls= f.text_area :detail, :class => :"input-xxlarge", :rows => 5
+    %div.control-group
+      %div.controls
+        = f.submit "登録", :class => "btn btn-primary"
+        = f.submit "キャンセル", :onclick => "window.location='/tasks/';return false", :class => :btn

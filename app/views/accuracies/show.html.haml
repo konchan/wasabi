@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @accuracy.name
+%p
+  %b Design:
+  = @accuracy.design
+
+= link_to 'Edit', edit_accuracy_path(@accuracy)
+\|
+= link_to 'Back', accuracies_path

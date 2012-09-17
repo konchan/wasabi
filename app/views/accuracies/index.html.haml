@@ -1,0 +1,21 @@
+%h1 Listing accuracies
+
+%table
+  %tr
+    %th Name
+    %th Design
+    %th
+    %th
+    %th
+
+  - @accuracies.each do |accuracy|
+    %tr
+      %td= accuracy.name
+      %td= accuracy.design
+      %td= link_to 'Show', accuracy
+      %td= link_to 'Edit', edit_accuracy_path(accuracy)
+      %td= link_to 'Destroy', accuracy, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Accuracy', new_accuracy_path

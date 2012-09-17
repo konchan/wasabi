@@ -1,0 +1,17 @@
+%div.row-fluid
+  %h2 活動記録
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li
+        %a{ href: "/activities/" } 実施済活動一覧
+      %li
+        %a{ href: "/activities/new" }
+          %i.icon-edit
+          新規登録
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } 活動編集
+      %li
+        %a{ href: "/activities/planned" } 活動予定
+    %div.row-fluid
+      %div.span12
+        = render 'form'

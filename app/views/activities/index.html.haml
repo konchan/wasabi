@@ -1,0 +1,35 @@
+%div.row-fluid
+  %h2 活動記録
+  %div.tabbable{ style: "margin-bottom: 18px;" }
+    %ul.nav.nav-tabs
+      %li.active
+        %a{ href: "#tab1", "data-toggle" => "tab" } 実施済活動一覧
+      %li
+        %a{ href: "/activities/new" }
+          %i.icon-edit
+          新規登録
+      %li
+        %a{ href: "/activities/planned" } 活動予定
+    %div.row-fluid
+      %div.span12
+        %table.table.table-bordered.table-striped
+          %tr
+            %th{ width: "6%"  } ID
+            %th{ width: "25%"  } 顧客名
+            %th{ width: "10%" } 案件コード
+            %th{ width: "45%" } 活動名
+            %th 活動実施日
+          - unless @activities.nil?
+            - @activities.each_with_index do |activity, idx|
+              %tr
+                %td
+                  %a{ href: "/activities/#{activity.id}" }= idx+1
+                %td
+                  %a{ href: "/activities/#{activity.id}" }= activity.campaign.customer.name
+                %td
+                  %a{ href: "/activities/#{activity.id}" }= activity.campaign.code
+                %td
+                  %a{ href: "/activities/#{activity.id}" }= activity.name
+                %td
+                  %a{ href: "/activities/#{activity.id}" }= activity.date.strftime('%Y-%m-%d')
+            = paginate @activities

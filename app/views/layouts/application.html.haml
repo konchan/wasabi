@@ -1,0 +1,87 @@
+-# coding:utf-8
+!!! 5
+%html{ "lang" => "ja" }
+  %head
+    %meta{ "charset" => "utf-8" }
+    %meta{ name: "viewpoint", content: "width=device-width, initial-scale=1.0" }
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+    :css
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      form, fieldset {
+        display: inline;
+        border: none;
+        margin: 0px;
+        padding: 0px;
+      }
+    %title wasabi
+  %body
+    %div.navbar.navbar-fixed-top
+      %div.navbar-inner
+        %div.container-fluid
+          %a.btn.btn-navbar{ "data-toggle" => "collapse", "data-target" => ".nav-collapse" }
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %span.brand{ href: "#" } Wasabi
+          %div.btn-group.pull-right
+            %a.btn.dropdown-toggle{ "data-toggle" => "dropdown", href: "#" }
+              %i.icon-user
+              = current_user.name if current_user
+              %span.caret
+            %ul.dropdown-menu
+              %li<
+                %a{ href: "#" } Profile
+              %li.divider
+              %li<
+                = link_to 'Sign Out', destroy_user_session_path, :method => :delete
+          %div.nav-collapse
+            %ul.nav
+              %li
+                %a{ href: "/" } Dashboard
+              %li
+                %a{ href: "/tasks/" } タスク
+              %li
+                %a{ href: "/activities/" } 活動
+              %li
+                %a{ href: "/campaigns/" } 案件
+              %li
+                %a{ href: "/customers/" } 顧客
+              %li
+                %a{ href: "/contacts/" } 担当者
+              -#%li.dropdown
+                -#%a.dropdown-toggle{ href: "#", "data-toggle" => "dropdown" }
+                  -#管理メニュー
+                  -#%b.caret
+                -#%ul.dropdown-menu
+                  -#%li
+                    -#%a{ href: "#" } 案件種別編集
+                  -#%li
+                    -#%a{ href: "#" } ステータス編集
+                  -#%li
+                    -#%a{ href: "#" } フェーズ編集
+                  -#%li
+                    -#%a{ href: "#" } 活動種別編集
+                  -#%li
+                    -#%a{ href: "#" } カスタムタグ編集
+            = form_tag "/dashboard/search", method: :post, class: "form-search" do
+              = text_field_tag :search, nil, class: "input-medium search-query", :placeholder => "案件を検索します"
+              = submit_tag "Search", class: "btn"
+    %div.row-fluid
+      -if flash[:notice]
+        %div.alert.alert-success.fade.in
+          %button.close{ type: "button", "data-dismiss" => "alert" } &times;
+          %p= notice
+          %p= alert
+    %div.container-fluid
+      =yield
+      %hr
+      %footer
+        %p 　&copy; Brains Technology, Inc. All rights reserved.

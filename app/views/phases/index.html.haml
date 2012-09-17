@@ -1,0 +1,21 @@
+%h1 Listing phases
+
+%table
+  %tr
+    %th Name
+    %th Design
+    %th
+    %th
+    %th
+
+  - @phases.each do |phase|
+    %tr
+      %td= phase.name
+      %td= phase.design
+      %td= link_to 'Show', phase
+      %td= link_to 'Edit', edit_phase_path(phase)
+      %td= link_to 'Destroy', phase, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Phase', new_phase_path

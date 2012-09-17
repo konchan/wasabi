@@ -22,16 +22,20 @@ gem 'jquery-rails'
 gem 'unicorn'
 gem 'compass'
 gem 'haml'
+gem 'kaminari'
+gem 'devise'
+gem 'cancan'
+# gem 'omniauth-google-oauth2'
+gem 'omniauth-openid'
 
 group :development, :test do
   gem 'simplecov', :require => false
   gem 'capybara'
   gem 'cucumber'
-  gem 'cucumber-rails'
   gem 'database_cleaner'
   gem 'rspec'
   gem 'rspec-rails'
-  gem 'shoulda'
+#  gem 'shoulda'
   gem 'factory_girl_rails'
   gem 'autotest'
   gem 'launchy'
@@ -39,4 +43,8 @@ group :development, :test do
   gem 'haml-rails'
 #  gem 'metric_fu'
   gem 'debugger'
+end
+
+group :test do
+  gem 'cucumber-rails'
 end

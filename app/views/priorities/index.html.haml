@@ -1,0 +1,21 @@
+%h1 Listing priorities
+
+%table
+  %tr
+    %th Name
+    %th Design
+    %th
+    %th
+    %th
+
+  - @priorities.each do |priority|
+    %tr
+      %td= priority.name
+      %td= priority.design
+      %td= link_to 'Show', priority
+      %td= link_to 'Edit', edit_priority_path(priority)
+      %td= link_to 'Destroy', priority, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Priority', new_priority_path
