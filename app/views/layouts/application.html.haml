@@ -12,10 +12,6 @@
     %div.navbar.navbar-fixed-top
       %div.navbar-inner
         %div.container-fluid
-          %a.btn.btn-navbar{ "data-toggle" => "collapse", "data-target" => ".nav-collapse" }
-            %span.icon-bar
-            %span.icon-bar
-            %span.icon-bar
           %span.brand{ href: "#" } Wasabi
           %div.btn-group.pull-right
             %a.btn.dropdown-toggle{ "data-toggle" => "dropdown", href: "#" }
@@ -42,21 +38,6 @@
                 %a{ href: "/customers/" } 顧客
               %li
                 %a{ href: "/contacts/" } 担当者
-              -#%li.dropdown
-                -#%a.dropdown-toggle{ href: "#", "data-toggle" => "dropdown" }
-                  -#管理メニュー
-                  -#%b.caret
-                -#%ul.dropdown-menu
-                  -#%li
-                    -#%a{ href: "#" } 案件種別編集
-                  -#%li
-                    -#%a{ href: "#" } ステータス編集
-                  -#%li
-                    -#%a{ href: "#" } フェーズ編集
-                  -#%li
-                    -#%a{ href: "#" } 活動種別編集
-                  -#%li
-                    -#%a{ href: "#" } カスタムタグ編集
             = form_tag "/dashboard/search", method: :post, class: "form-search" do
               = text_field_tag :search, nil, class: "input-medium search-query", :placeholder => "案件を検索します"
               = submit_tag "Search", class: "btn"
@@ -67,7 +48,7 @@
           %p= notice
           %p= alert
     %div.container-fluid
-      =yield
+      = yield
       %hr
       %footer
         %p 　&copy; Brains Technology, Inc. All rights reserved.
