@@ -27,6 +27,7 @@ gem 'devise'
 gem 'cancan'
 # gem 'omniauth-google-oauth2'
 gem 'omniauth-openid'
+gem 'rack-ssl', :require => 'rack/ssl'
 
 group :development, :test do
   gem 'simplecov', :require => false

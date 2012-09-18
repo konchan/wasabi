@@ -16,7 +16,6 @@
 
 .DS_Store
 .*~
-*.lock
 /db/*development.*
 /db/*test.*
 log/**/*

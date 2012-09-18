@@ -66,8 +66,12 @@ class Campaign
        not_bti
      else
        q = Regexp.new(word)
-       c_id = Customer.where(name: q).first.id
-       not_bti.where(name: q) + not_bti.where(code: q) + not_bti.where(customer_id: c_id)
+       if Customer.where(name: q).empty?
+         not_bti.where(name: q) + not_bti.where(code: q)
+       else
+         c_id = Customer.where(name: q).first.id
+         not_bti.where(name: q) + not_bti.where(code: q) + not_bti.where(customer_id: c_id)
+       end
      end
    end
 end
