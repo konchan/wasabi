@@ -29,4 +29,5 @@ class Task
     return campaign.code
   end
 
+  validates :name, presence: {message: "タスク名は必須です"}
 end

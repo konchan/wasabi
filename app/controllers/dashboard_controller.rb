@@ -8,12 +8,12 @@ class DashboardController < ApplicationController
     @tasks = Task.unclosed.asc(:deadline)
     @results = Hash.new 
     @results[:earnings] = Campaign.where(:closed_at.gte => Time.zone.parse("2012-08-01")).has_committed.map(&:amount).map(&:to_i).sum
-    @results[:performance] = Campaign.has_committed.count
+    @results[:performance] = Campaign.where(:closed_at.gte => Time.zone.parse("2012-08-01")).has_committed.count
     @results[:percentile1] = @results[:earnings]*100/105000000
     @results[:percentile2] = @results[:performance]*100/17
     @total = Campaign.not_bti
     @pending_count = Campaign.pendings.count
-    @keep_in_touch = Campaign.not_bti.where(:recent_act_at.lte => 3.months.ago).asc(:date)
+    @keep_in_touch = Campaign.not_bti.not_closed.where(:recent_act_at.lte => 3.months.ago).asc(:date)
     @test = nil
       
     respond_to do |format|
@@ -23,8 +23,10 @@ class DashboardController < ApplicationController
   end
   
   def search
-    if params[:search]
-      @campaigns = Campaign.search(params[:search])
+    word = params[:search]
+    if word
+      @campaigns = Campaign.search(word)
+      @customers = Customer.search(word)
     end
     
     respond_to do |format|

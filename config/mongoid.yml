@@ -70,6 +70,10 @@ test:
 production:
   sessions:
     default:
-      uri: <%= ENV['MONGOHQ_URL'] %>
+      database: wasabi_production
+      hosts:
+        - localhost:27017
       options:
-        skip_version_check: true
+        consistency: :strong
+  options:
+    use_activesupport_time_zone: true

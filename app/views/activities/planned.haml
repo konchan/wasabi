@@ -30,5 +30,5 @@
                     - activities.each do |act|
                       %tr
                         %td{ width: "20%" }= link_to act.date.strftime('%Y-%m-%d %H:%M'), act
-                        %td{ width: "60%" }= link_to "#{act.campaign.code}  ##{act.number} #{act.name}", act
+                        %td{ width: "60%" }= link_to "[#{act.campaign.customer.name}] #{act.campaign.code}  ##{act.number} #{act.name}", act
                         %td{ width: "20%" }= link_to act.user.name, act

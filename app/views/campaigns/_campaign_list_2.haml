@@ -24,13 +24,6 @@
             %span.badge{ style: "background-color: #{campaign.kind.design}" }= campaign.kind.name
             - unless campaign.accuracy.nil?
               %span.badge{ style: "background-color: #{campaign.accuracy.design}" }= campaign.accuracy.name
-            - case
-              - when campaign.ongoing?
-                %span.badge{ style: 'background-color: #1E9AD7' } 進行中
-              - when campaign.pending?
-                %span.badge{ style: 'background-color: #C0C966' } 保留中
-              - when campaign.closed?
-                %span.badge{ style: 'background-color: #999999' } 終了
         %td
           = campaign.get_period
         %td

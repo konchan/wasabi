@@ -23,4 +23,12 @@ class Customer
     uniqueness: {message: "顧客コードが重複しています。別なコードを入力してください"}, 
     length: {is: 3, message: "顧客コードが3桁未満、もしくは4桁以上になっています"}
 
+  def self.search(word)
+    if word.blank?
+      not_bti
+    else
+      q = Regexp.new(word)
+      where(name: q)
+    end
+  end
 end

@@ -65,17 +65,6 @@ module Wasabi
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
-    
-    ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
-      html = ""
-      # add nokogiri gem to Gemfile
-      elements = Nokogiri::HTML::DocumentFragment.parse(html_tag).css "input"
-      elements.each do |e|
-        if e.node_name.eql? 'input'
-          html = %(#{html_tag}<span style="color: #b94a48;">&nbsp; ：エラー</span></div>).html_safe
-        end
-      end
-      html
-    end    
+    config.action_view.field_error_proc = Proc.new {|html_error, instance| "#{html_error}".html_safe }
   end
 end

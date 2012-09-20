@@ -1,3 +1,4 @@
+# coding: utf-8
 class Activity
   include Mongoid::Document
   include Mongoid::Timestamps # adds created_at and updated_at fields
@@ -15,4 +16,6 @@ class Activity
   field :number, type: Integer
   field :date, type: Time
   field :detail, type: String
+
+  validates :name, presence: {message: "活動名は必須です"}
 end

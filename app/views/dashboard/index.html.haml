@@ -10,6 +10,7 @@
       %td
         %div.progress
           %div.bar{ style: "width: #{@results[:percentile1]}%;" }
+      %td{ width: "12%" } 達成度：#{@results[:percentile1]}%
     %tr
       %td 現在導入社数
       %td #{@results[:performance]} 社
@@ -17,39 +18,40 @@
       %td
         %div.progress
           %div.bar{ style: "width: #{@results[:percentile2]}%;" }
+      %td{ width: "12%" } 達成度：#{@results[:percentile2]}%
     %tr
-      %td 現在の総案件数
+      %td= link_to "現在のアプローチ社数", customers_path
+      %td{ colspan: 4 } #{Customer.not_bti.count}
+    %tr
+      %td= link_to "現在の総案件数", campaigns_path
       %td #{@total.count}
-      %td 現在の保留案件数
-      %td #{@pending_count}
+      %td= link_to "現在の保留案件数", pendings_campaigns_path
+      %td{ colspan: 2 } #{@pending_count}
     %tr
       %td{ colspan:2 } 過去3ヶ月以上アクションがない案件数
-      %td{ colspan:2 } #{@keep_in_touch.count} #{link_to "（案件を確認する）", "/campaigns/no_act_for_three_months/"}
--#%div.row-fluid
-  -#%div.span12
-    -#%p 活動件数推移をここに書く
+      %td{ colspan:3 } #{@keep_in_touch.count} #{link_to "（案件を確認する）", no_act_for_three_months_campaigns_path}
+%div.row-fluid
+  %div.span12
+    %div{ align: "center" }
+      %canvas#actgraph
 %div.row-fluid
   %div.span6
     %h4 今後1週間の予定
     %ul
       - unless @next_actions.empty?
         - @next_actions.each do |nact|
-          %li
-            %a{ href: "/activities/#{nact.id}" }
-              = "[#{nact.campaign.code}] ##{nact.number} #{nact.name}  -- #{nact.date.strftime('%Y-%m-%d %H:%M')}"
+          %li= link_to "[#{nact.campaign.code}] ##{nact.number} #{nact.name}  -- #{nact.date.strftime('%Y-%m-%d %H:%M')}", activity_path(nact.id)
       - else
         %li
           予定はありません（
-          %a{ href: "/activities/new/" } 予定を登録する
+          = link_to "予定を登録する", new_activity_path 
           ）
   %div.span6
     %h4 未消化のタスク
     %ul
       - unless @tasks.empty?
         - @tasks.each do |task|
-          %li
-            %a{ href: "/tasks/#{task.id}" }
-              = "[#{task.campaign_code}] #{task.name} @#{task.user.name} -- #{task.deadline.strftime('%Y-%m-%d %H:%M')}"
+          %li= link_to "[#{task.campaign_code}] #{task.name} @#{task.user.name} -- #{task.deadline.strftime('%Y-%m-%d %H:%M')}", task_path(task.id)
       - else
         %li
           未消化のタスクはありません
@@ -60,6 +62,4 @@
     %ul
       - unless @recent_actions.empty?
         - @recent_actions.each do |nact|
-          %li
-            %a{ href: "/activities/#{nact.id}" }
-              = "[#{nact.campaign.customer.name}] ##{nact.number} #{nact.name}  -- #{nact.date.strftime('%Y-%m-%d %H:%M')}"
+          %li= link_to "[#{nact.campaign.customer.name}] ##{nact.number} #{nact.name}  -- #{nact.date.strftime('%Y-%m-%d %H:%M')}", activity_path(nact.id)

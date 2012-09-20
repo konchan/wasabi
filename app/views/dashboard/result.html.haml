@@ -3,5 +3,6 @@
 %div.row-fluid
   %div.span12
     %p 案件管理から #{@campaigns.count} 件 該当案件が見つかりました。
+    %p 顧客管理から #{@customers.count} 件 該当顧客が見つかりました。
     %div#refreshable
-      = render 'campaign_list', :campaigns => @campaigns
+      = render 'campaign_list', :campaigns => @campaigns, :customers => @customers

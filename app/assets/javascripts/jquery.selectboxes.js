@@ -110,6 +110,7 @@ $.fn.addOption = function()
 			{
 				for(var item in items)
 				{
+				  // customize
 					add(this, items[item][0], items[item][1], sO, startindex);
 					startindex += 1;
 				}

@@ -10,11 +10,14 @@
           新規登録
     %div.row-fluid
       %div.span12
+        %div.pagination.pagination-centered
+          = paginate @customers      
         %table.table.table-bordered.table-striped
           %tr
             %th{ width: 50  } ID
-            %th{ width: 200 } 顧客コード
-            %th{ width: 400 } 顧客名
+            %th{ width: 100 } 顧客コード
+            %th{ width: 350 } 顧客名
+            %th{ width: 150 } 紹介元
             %th 総案件数
           - unless @customers.nil?
             - @customers.each_with_index do |customer, idx|
@@ -26,5 +29,8 @@
                 %td
                   %a{ href: "/customers/#{customer.id}" }= customer.name
                 %td
-                  %a{ href: "/customers/#{customer.id}" }= customer.counter
-            = paginate @customers      
+                  %a{ href: "/customers/#{customer.id}" }= customer.referral
+                %td
+                  %a{ href: "/customers/#{customer.id}" }= Campaign.where(customer_id: customer.id).count
+        %div.pagination.pagination-centered
+          = paginate @customers      

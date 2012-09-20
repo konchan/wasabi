@@ -1,34 +1,64 @@
-%table.table.table-bordered.table-striped
-  %tr
-    %th{ width: "5%" } ID
-    %th{ width: "10%" } 案件コード
-    %th{ width: "44%" } 案件名
-    %th{ width: "13%" } 目標受注時期
-    %th{ width: "13%" } 目標受注額
-    %th 案件更新日
-  - unless campaigns.nil?
-    - campaigns.each_with_index do |campaign, idx|
-      %tr
-        %td
-          %a{ href: "/campaigns/#{campaign.id}" }= idx+1
-        %td
-          %a{ href: "/campaigns/#{campaign.id}" }= campaign.code
-        %td
-          %a{ href: "/campaigns/#{campaign.id}" }
-            = campaign.name
-            %span.badge{ style: "background-color: #{campaign.kind.design}" }= campaign.kind.name
-            - unless campaign.accuracy.nil?
-              %span.badge{ style: "background-color: #{campaign.accuracy.design}" }= campaign.accuracy.name
-            - case
-              - when campaign.ongoing?
-                %span.badge{ style: 'background-color: #1E9AD7' } 進行中
-              - when campaign.pending?
-                %span.badge{ style: 'background-color: #C0C966' } 保留中
-              - when campaign.closed?
-                %span.badge{ style: 'background-color: #999999' } 終了
-        %td
-          = campaign.get_period
-        %td
-          = to_currency(campaign.get_amount.to_i)
-        %td
-          %font{ color: "#666666"}= campaign.updated_at.strftime('%Y-%m-%d')
+%div.tabbable
+  %ul.nav.nav-tabs
+    %li.active= link_to "案件検索結果", "#tab1", "data-toggle" => "tab"
+    %li= link_to "顧客検索結果", "#tab2", "data-toggle" => "tab"
+  %div.tab-content
+    %div.tab-pane.active#tab1
+      %table.table.table-bordered.table-striped
+        %tr
+          %th{ width: "5%" } ID
+          %th{ width: "20%" } 顧客名
+          %th{ width: "7%" } 案件コード
+          %th{ width: "36%" } 案件名
+          %th{ width: "11%" } 目標受注時期
+          %th{ width: "11%" } 目標受注額
+          %th 案件更新日
+        - unless campaigns.nil?
+          - campaigns.each_with_index do |campaign, idx|
+            %tr
+              %td
+                %a{ href: "/campaigns/#{campaign.id}" }= idx+1
+              %td
+                %a{ href: "/campaigns/#{campaign.id}" }= campaign.customer.name
+              %td
+                %a{ href: "/campaigns/#{campaign.id}" }= campaign.code
+              %td
+                %a{ href: "/campaigns/#{campaign.id}" }
+                  = campaign.name
+                  %span.badge{ style: "background-color: #{campaign.kind.design}" }= campaign.kind.name
+                  - unless campaign.accuracy.nil?
+                    %span.badge{ style: "background-color: #{campaign.accuracy.design}" }= campaign.accuracy.name
+                  - case
+                    - when campaign.ongoing?
+                      %span.badge{ style: 'background-color: #1E9AD7' } 進行中
+                    - when campaign.pending?
+                      %span.badge{ style: 'background-color: #C0C966' } 保留中
+                    - when campaign.closed?
+                      %span.badge{ style: 'background-color: #999999' } 終了
+              %td
+                = campaign.get_period
+              %td
+                = to_currency(campaign.get_amount.to_i)
+              %td
+                %font{ color: "#666666"}= campaign.recent_act_at.strftime('%Y-%m-%d')
+    %div.tab-pane#tab2
+      %table.table.table-bordered.table-striped
+        %tr
+          %th{ width: 50  } ID
+          %th{ width: 100 } 顧客コード
+          %th{ width: 350 } 顧客名
+          %th{ width: 150 } 紹介元
+          %th 総案件数
+        - unless customers.nil?
+          - customers.each_with_index do |customer, idx|
+            %tr
+              %td
+                %a{ href: "/customers/#{customer.id}" }= idx+1
+              %td
+                %a{ href: "/customers/#{customer.id}" }= customer.code
+              %td
+                %a{ href: "/customers/#{customer.id}" }= customer.name
+              %td
+                %a{ href: "/customers/#{customer.id}" }= customer.referral
+              %td
+                %a{ href: "/customers/#{customer.id}" }= Campaign.where(customer_id: customer.id).count

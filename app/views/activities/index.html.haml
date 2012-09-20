@@ -9,7 +9,9 @@
           %i.icon-edit
           新規登録
       %li
-        %a{ href: "/activities/planned" } 活動予定
+        %a{ href: "/activities/planned" }
+          %i.icon-calendar
+          活動予定
     %div.row-fluid
       %div.span12
         %table.table.table-bordered.table-striped
@@ -32,4 +34,5 @@
                   %a{ href: "/activities/#{activity.id}" }= activity.name
                 %td
                   %a{ href: "/activities/#{activity.id}" }= activity.date.strftime('%Y-%m-%d')
-            = paginate @activities
+        %div.pagination.pagination-centered
+          = paginate @activities

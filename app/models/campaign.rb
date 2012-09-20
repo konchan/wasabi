@@ -28,6 +28,8 @@ class Campaign
   field :term2, type: Date
   field :description, type: String
 
+  validates :name, presence: {message: "案件名は必須です"}
+
   def status_with_inquiry
     status.try(:inquiry)
   end
@@ -37,6 +39,7 @@ class Campaign
   scope :actives, where(status: :ongoing)
   scope :pendings, where(status: :pending)
   scope :closed, where(status: :closed) 
+  scope :not_closed, excludes(status: :closed)
   scope :not_bti, excludes(code: "BTI000")
   scope :has_committed, lambda {
     a_id = Accuracy.where(name: "Commit").first.id
@@ -62,16 +65,20 @@ class Campaign
   end
 
   def self.search(word)
-     if word.blank?
-       not_bti
-     else
-       q = Regexp.new(word)
-       if Customer.where(name: q).empty?
-         not_bti.where(name: q) + not_bti.where(code: q)
-       else
-         c_id = Customer.where(name: q).first.id
-         not_bti.where(name: q) + not_bti.where(code: q) + not_bti.where(customer_id: c_id)
-       end
-     end
-   end
+    if word.blank?
+      not_bti
+    else
+    　results = nil
+      q = Regexp.new(word)
+      if Customer.where(name: q).empty?
+        results = not_bti.where(name: q) + not_bti.where(code: q)
+      else
+        results = not_bti.where(name: q) + not_bti.where(code: q)
+        Customer.where(name: q).each do |c_id|
+         results += not_bti.where(customer_id: c_id)
+        end
+      end
+      results.uniq
+    end
+  end
 end

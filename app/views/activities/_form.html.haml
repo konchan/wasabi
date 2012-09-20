@@ -8,7 +8,7 @@
   %fieldset
     %div.control-group
       %label.control-label 関連する顧客
-      %div.controls= select_tag :activity_customer_id, options_from_collection_for_select(Customer.not_bti, :id, :name)
+      %div.controls= select_tag :activity_customer_id, options_from_collection_for_select(@customers, :id, :name)
     %div.control-group
       %label.control-label 案件名
       %div.controls= f.collection_select :campaign_id, @campaigns, :id, :name, :class => "input-xlarge"
@@ -23,7 +23,7 @@
       %div.controls= f.text_field :name, :class => "input-xlarge"
     %div.control-group
       %label.control-label 活動日
-      %div.controls= f.text_field :date, :id => "datetimepicker", :class => "input-xlarge", :value => DateTime.now.strftime('%Y-%m-%d %H:%M')
+      %div.controls= f.text_field :date, :id => "datetimepicker", :class => "input-xlarge"
     %div.control-group
       %label.control-label 詳細
       %div.controls= f.text_area :detail, :class => "input-xxlarge", :rows => 15

@@ -46,6 +46,7 @@ class ActivitiesController < ApplicationController
   def new
     @activity = Activity.new
     @campaigns = params[:id]? Campaign.where(id: params[:id]) : Campaign.actives
+    @customers = params[:id]? Customer.where(id: @campaigns.first.customer_id) : Customer.not_bti
 
     respond_to do |format|
       format.html # new.html.erb
@@ -57,6 +58,7 @@ class ActivitiesController < ApplicationController
   def edit
     @activity = Activity.find(params[:id])
     @campaigns = Campaign.where(id: @activity.campaign_id)
+    @customers = params[:id]? Customer.where(id: @campaigns.first.customer_id) : Customer.not_bti
   end
 
   # POST /activities
@@ -64,8 +66,8 @@ class ActivitiesController < ApplicationController
   def create
     @activity = Activity.new(params[:activity])
     @activity.campaign.phase_id = @activity.phase_id
-    puts "debug #{@activity.campaign.recent_act_at}"
-    if @activity.campaign.recent_act_at.nil? || @activity.campaign.recent_act_at > @activity.date
+
+    if @activity.date <= Time.now && (@activity.campaign.recent_act_at.nil? || @activity.campaign.recent_act_at < @activity.date)
       @activity.campaign.recent_act_at = @activity.date
     end
     @activity.user_id = current_user.id
@@ -91,7 +93,7 @@ class ActivitiesController < ApplicationController
 
     respond_to do |format|
       if @activity.update_attributes(params[:activity])
-        if @activity.date < @activity.campaign.recent_act_at
+        if @activity.date <= Time.now && @activity.date > @activity.campaign.recent_act_at
           @campaign.update_attribute(:recent_act_at, @activity.date)
         end
         format.html { redirect_to @activity, notice: '活動記録が更新されました。' }

@@ -3,7 +3,7 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = Customer.excludes(name: "BTI").page(params[:page] || 1).per(25)
+    @customers = Customer.excludes(name: "BTI").asc(:created_at).page(params[:page] || 1).per(25)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -16,7 +16,7 @@ class CustomersController < ApplicationController
   def show
     @customer = Customer.find(params[:id])
     @campaigns = @customer.campaigns.desc(:updated_at)
-    puts @campaigns
+    @contacts = @customer.contacts
 
     respond_to do |format|
       format.html # show.html.erb

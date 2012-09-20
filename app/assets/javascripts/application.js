@@ -24,7 +24,7 @@
 
 $(document).ready(function(){
 //  $.getJSON("/dashboard/orders_for_each_month/", function(data){ ccchart.init("hoge", data.json); });
-  $("#datepicker,#datepicker2,#datepicker3,#datepicker4").datepicker($.datepicker.regional["ja"],{dateFormat: 'yy-mm-dd'});
+  $("#datepicker,#datepicker2,#datepicker3,#datepicker4").datepicker({dateFormat: 'yy-mm-dd'});
 //, timeFormat: 'hh:mm z', showTimezone: false, timezoneList: [{"value": "+0900", "label": "JST"}]});
   $("#datetimepicker").datetimepicker({dateFormat: 'yy-mm-dd'});
 //, timeFormat: 'hh:mm z', showTimezone: false, timezoneList: [{"value": "+0900", "label": "JST"}]});

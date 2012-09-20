@@ -3,7 +3,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.excludes(name: "未定")
+    @contacts = Contact.excludes(name: "未定").asc(:customer_id).page(params[:page] || 1).per(25)
 
     respond_to do |format|
       format.html # index.html.erb

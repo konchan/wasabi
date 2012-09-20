@@ -194,7 +194,7 @@ ja:
       next: "次ページ >>"
       first: "最初"
       last: "最後"
-      truncate: ""
+      truncate: "…"
   # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository
   activemodel:
     errors:

@@ -12,7 +12,7 @@ class CampaignsController < ApplicationController
   end
   
   def no_act_for_three_months
-    @campaigns = Campaign.not_bti.where(:recent_act_at.lte => 3.months.ago).asc(:date).page(params[:page] || 1).per(25)
+    @campaigns = Campaign.not_bti.not_closed.where(:recent_act_at.lte => 3.months.ago).asc(:date).page(params[:page] || 1).per(25)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -84,14 +84,19 @@ class CampaignsController < ApplicationController
   # GET /campaigns/:id/new
   def new
     @campaign = Campaign.new
-    @customers = nil
-    @contacts = nil
+    @customers = Customer.not_bti
+    @contacts = Contact.all
     if params[:id]
-      @customers = Customer.where(id: params[:id])
-      @contacts = Contact.where(name: "未定") + Contact.where(customer_id: @customers[0].id) if @customers
-    else
-      @customers = Customer.not_bti
-      @contacts = Contact.all
+      case request.referer
+      when /customers/
+        @customers = Customer.where(id: params[:id])
+        @contacts = Contact.where(name: "未定") + Contact.where(customer_id: @customers[0].id) if @customers
+      when /contacts/
+        contact = Contact.find(params[:id])
+        @contacts = Contact.where(name: "未定") + Contact.where(id: params[:id])
+        @customers = Customer.where(id: contact.customer_id)
+        @campaign.contact_id = contact.id
+      end
     end
     respond_to do |format|
       format.html # new.html.erb

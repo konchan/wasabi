@@ -62,12 +62,15 @@ class TasksController < ApplicationController
     @task = Task.new
     @campaigns = Campaign.all
     @activities = Activity.all
+    @customers = Customer.not_bti
     case request.referrer
     when /campaign/
       @task.campaign_id = params[:id]
+      @customers = Customer.where(id: Campaign.find(params[:id]).customer_id)
     when /activities/
       @task.campaign_id = Activity.find(params[:id]).campaign_id
       @task.activity_id = params[:id]
+      @customers = Customer.where(id: Campaign.find(@task.campaign_id).customer_id)
     end
 
     respond_to do |format|
@@ -79,6 +82,7 @@ class TasksController < ApplicationController
   # GET /tasks/1/edit
   def edit
     @task = Task.find(params[:id])
+    @customers = Customer.where(id: Campaign.find(@task.campaign_id).customer_id)
   end
 
   # POST /tasks

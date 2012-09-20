@@ -28,10 +28,9 @@
                   %tbody
                     %tr
                       %td{ width: 50 } 案件
-                      %td
-                        %a{ href: "/campaigns/#{@activity.campaign.id}" } [ #{@activity.campaign.code} ] #{@activity.campaign.name}
+                      %td= link_to "[ #{@activity.campaign.code} ] #{@activity.campaign.name}", campaign_path(@activity.campaign)
                       %td{ width: 50 } 顧客名
-                      %td= @activity.campaign.customer.name
+                      %td= link_to "#{@activity.campaign.customer.name}", customer_path(@activity.campaign.customer)
                     %tr
                       %td{ width: 50 }
                         - if @activity.date > Time.now

@@ -26,4 +26,5 @@
                   【#{task.campaign.code}】  #{task.name}
                   %span.badge{ style: "background-color: #{task.priority.design}" }= task.priority.name
               %td{ width: "20%" }= link_to task.user.name, task
-        = paginate @tasks      
+        %div.pagination.pagination-centered
+          = paginate @tasks      

@@ -47,9 +47,15 @@
                   %br
                   %br
                 %div.row-fluid
-                  %div.span12
+                  %div.span6
                     %h5 本顧客に関連する案件一覧
                     %ul
                       - unless @campaigns.empty?
                         - @campaigns.each do |c|
                           %li= link_to "#{c.name}　　[#{c.status_name}]", c
+                  %div.span6
+                    %h5 本顧客に関連する担当者一覧
+                    %ul
+                      - unless @contacts.empty?
+                        - @contacts.each do |c|
+                          %li= link_to "#{c.title}  #{c.name}", c

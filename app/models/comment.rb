@@ -11,4 +11,7 @@ class Comment
 
   field :title, type: String
   field :description, type: String
+
+  validates :title, presence: {message: "コメントタイトルは必須です"}
+  validates :description, presence: {message: "コメントの内容は必須です"}
 end

@@ -10,6 +10,8 @@
           新規登録
     %div.row-fluid
       %div.span12
+        %div.pagination.pagination-centered
+          = paginate @contacts
         %table.table.table-bordered.table-striped
           %tr
             %th{ width: 50  } ID
@@ -24,3 +26,5 @@
                   %a{ href: "/contacts/#{contact.id}" }= contact.name
                 %td
                   %a{ href: "/contacts/#{contact.id}" }= contact.customer.name
+        %div.pagination.pagination-centered
+          = paginate @contacts
