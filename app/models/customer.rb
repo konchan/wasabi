@@ -28,7 +28,8 @@ class Customer
       not_bti
     else
       q = Regexp.new(word)
-      where(name: q)
+      results = where(name: q) + where(code: q)
+      results.uniq
     end
   end
 end

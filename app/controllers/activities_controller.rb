@@ -3,7 +3,7 @@ class ActivitiesController < ApplicationController
   # GET /activities
   # GET /activities.json
   def index
-    @activities = Activity.where(:date.lte => Time.zone.now).desc(:updated_at).page(params[:page] || 1).per(25)
+    @activities = Activity.where(:date.lte => Time.zone.now).desc(:date).page(params[:page] || 1).per(25)
 
     respond_to do |format|
       format.html # index.html.erb

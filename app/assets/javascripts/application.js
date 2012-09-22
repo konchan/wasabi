@@ -13,9 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui-1.8.23.custom.min
-//= require twitter/bootstrap
-//= require jquery.simple-color-picker
-//= require farbtastic
+//= require bootstrap
+//= require bootstrap-addon
 //= require jquery.timepicker
 //= require jquery-ui-sliderAccess
 //= require jquery.selectboxes
@@ -27,6 +26,8 @@ $(document).ready(function(){
   $("#datepicker,#datepicker2,#datepicker3,#datepicker4").datepicker({dateFormat: 'yy-mm-dd'});
 //, timeFormat: 'hh:mm z', showTimezone: false, timezoneList: [{"value": "+0900", "label": "JST"}]});
   $("#datetimepicker").datetimepicker({dateFormat: 'yy-mm-dd'});
+//  $.getJSON("/dashboard/orders_for_each_month/", function(data){
+//    ccchart.init("actgraph", data);});
 //, timeFormat: 'hh:mm z', showTimezone: false, timezoneList: [{"value": "+0900", "label": "JST"}]});
 //
 //  $("#campaign_customer_id").change(function(){

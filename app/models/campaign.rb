@@ -20,7 +20,7 @@ class Campaign
   field :status, type: String, default: :ongoing
   field :counter, type: Integer, default: 0
   field :started_at, type: Date
-  field :recent_act_at, type: DateTime, default: Time.zone.now
+  field :recent_act_at, type: DateTime, default: Time.zone.parse("2012-04-01")
   field :closed_at, type: Date
   field :period, type: Date
   field :amount, type: String, default: "0"

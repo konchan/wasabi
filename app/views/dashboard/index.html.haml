@@ -1,51 +1,78 @@
 %div.row-fluid
-  %table.table
-    %tr
-      %th{ colspan: 4 }
-        %h4 現在の状況
-    %tr
-      %td{ width: "15%" } 現在売り上げ
-      %td{ width: "15%" }= to_currency(@results[:earnings])
-      %td{ width: "25%" } / #{to_currency(105000000)} [コミット売上]
-      %td
-        %div.progress
-          %div.bar{ style: "width: #{@results[:percentile1]}%;" }
-      %td{ width: "12%" } 達成度：#{@results[:percentile1]}%
-    %tr
-      %td 現在導入社数
-      %td #{@results[:performance]} 社
-      %td / 17 社 [目標導入社数]
-      %td
-        %div.progress
-          %div.bar{ style: "width: #{@results[:percentile2]}%;" }
-      %td{ width: "12%" } 達成度：#{@results[:percentile2]}%
-    %tr
-      %td= link_to "現在のアプローチ社数", customers_path
-      %td{ colspan: 4 } #{Customer.not_bti.count}
-    %tr
-      %td= link_to "現在の総案件数", campaigns_path
-      %td #{@total.count}
-      %td= link_to "現在の保留案件数", pendings_campaigns_path
-      %td{ colspan: 2 } #{@pending_count}
-    %tr
-      %td{ colspan:2 } 過去3ヶ月以上アクションがない案件数
-      %td{ colspan:3 } #{@keep_in_touch.count} #{link_to "（案件を確認する）", no_act_for_three_months_campaigns_path}
-%div.row-fluid
-  %div.span12
+  %div.span6
+    %table.table
+      %tr
+        %th{ colspan: 3 }
+          %h4 現在の状況
+      %tr
+        %td{ width: "15%" } 売り上げ
+        %td{ width: "15%" }= to_currency(@results[:earnings])
+        %td{ width: "25%" } / #{to_currency(105000000)} [コミット売上]
+      %tr
+        %td{ colspan: 2 }
+          %div.progress
+            %div.bar{ style: "width: #{@results[:percentile1]}%;" }
+        %td{ width: "12%" } 達成度：#{@results[:percentile1]}%
+      %tr
+        %td 導入社数
+        %td #{@results[:performance]} 社
+        %td / 17 社 [目標導入社数]
+      %tr
+        %td{ colspan: 2 }
+          %div.progress
+            %div.bar{ style: "width: #{@results[:percentile2]}%;" }
+        %td{ width: "12%" } 達成度：#{@results[:percentile2]}%
+      %tr
+        %td{ colspan: 2 }= link_to "アプローチ社数", customers_path
+        %td #{Customer.not_bti.count}
+      %tr
+        %td{ colspan: 2 }= link_to "総案件数", campaigns_path
+        %td #{@total.count}
+      %tr
+        %td{ colspan: 2 }= link_to "保留案件数", pendings_campaigns_path
+        %td #{@pending_count}
+      %tr
+        %td{ colspan:2 }= link_to "過去3ヶ月以上アクションがない案件数", no_act_for_three_months_campaigns_path
+        %td= @keep_in_touch.count
+  %div.span6
     %div{ align: "center" }
-      %canvas#actgraph
+      %canvas#salesgraph
 %div.row-fluid
   %div.span6
-    %h4 今後1週間の予定
-    %ul
-      - unless @next_actions.empty?
-        - @next_actions.each do |nact|
-          %li= link_to "[#{nact.campaign.code}] ##{nact.number} #{nact.name}  -- #{nact.date.strftime('%Y-%m-%d %H:%M')}", activity_path(nact.id)
-      - else
-        %li
-          予定はありません（
-          = link_to "予定を登録する", new_activity_path 
-          ）
+    %div.row-fluid
+      %h4 今後1週間の予定
+      %ul
+        - unless @next_actions.empty?
+          - @next_actions.each do |nact|
+            %li= link_to "[#{nact.campaign.code}] ##{nact.number} #{nact.name}  -- #{nact.date.strftime('%Y-%m-%d %H:%M')}", activity_path(nact.id)
+        - else
+          %li
+            予定はありません（
+            = link_to "予定を登録する", new_activity_path 
+            ）
+    %div.row-fluid
+      %h4 最新の活動実績（10件）
+      %div.tabbable
+        %ul.nav.nav-tabs
+          %li.active= link_to "訪問", "#tab0", "data-toggle" => "tab"
+          %li= link_to "メール", "#tab1", "data-toggle" => "tab"
+          %li= link_to "ＤＭ", "#tab2", "data-toggle" => "tab"
+          %li= link_to "電話", "#tab3", "data-toggle" => "tab"
+          %li= link_to "来客", "#tab4", "data-toggle" => "tab"
+        %div.tab-content
+          - @recent_actions.each_with_index do |recent_actions, idx|
+            - if idx == 0
+              %div.tab-pane.active{ id: "tab#{idx}" }
+                %ul
+                  - unless recent_actions.empty?
+                    - recent_actions.each do |nact|
+                      %li= link_to "[#{nact.campaign.customer.name}] ##{nact.number} #{nact.name}  -- #{nact.date.strftime('%Y-%m-%d %H:%M')}", activity_path(nact.id)
+            - else
+              %div.tab-pane{ id: "tab#{idx}" }
+                %ul
+                  - unless recent_actions.empty?
+                    - recent_actions.each do |nact|
+                      %li= link_to "[#{nact.campaign.customer.name}] ##{nact.number} #{nact.name}  -- #{nact.date.strftime('%Y-%m-%d %H:%M')}", activity_path(nact.id)
   %div.span6
     %h4 未消化のタスク
     %ul
@@ -58,8 +85,5 @@
 %br
 %div.row-fluid
   %div.span12
-    %h4 最新の活動実績（10件）
-    %ul
-      - unless @recent_actions.empty?
-        - @recent_actions.each do |nact|
-          %li= link_to "[#{nact.campaign.customer.name}] ##{nact.number} #{nact.name}  -- #{nact.date.strftime('%Y-%m-%d %H:%M')}", activity_path(nact.id)
+    %div{ align: "center" }
+      %canvas#actgraph

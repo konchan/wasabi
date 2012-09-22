@@ -31,7 +31,9 @@
                 %td
                   %a{ href: "/activities/#{activity.id}" }= activity.campaign.code
                 %td
-                  %a{ href: "/activities/#{activity.id}" }= activity.name
+                  %a{ href: "/activities/#{activity.id}" }
+                    = activity.name
+                    %span.badge{ style: "background-color: #{activity.action_kind.design}" }= activity.action_kind.name
                 %td
                   %a{ href: "/activities/#{activity.id}" }= activity.date.strftime('%Y-%m-%d')
         %div.pagination.pagination-centered

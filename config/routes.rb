@@ -5,6 +5,8 @@ Wasabi::Application.routes.draw do
       post :search
     end
   end
+  match 'dashboard/orders_for_each_month/:width' => 'dashboard#orders_for_each_month'
+  match 'dashboard/acts_for_each_month/:width' => 'dashboard#acts_for_each_month'
   
   resources :customers
   resources :contacts

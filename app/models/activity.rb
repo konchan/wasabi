@@ -16,6 +16,27 @@ class Activity
   field :number, type: Integer
   field :date, type: Time
   field :detail, type: String
+  
+  scope :visit, lambda {
+    ak_id = ActionKind.where(name: "訪問").first.id
+    where(action_kind_id: ak_id)
+  }
+  scope :mail, lambda {
+    ak_id = ActionKind.where(name: "メール").first.id
+    where(action_kind_id: ak_id)
+  }
+  scope :DM, lambda {
+    ak_id = ActionKind.where(name: "ダイレクトメール（DM）").first.id
+    where(action_kind_id: ak_id)
+  }
+  scope :call, lambda {
+    ak_id = ActionKind.where(name: "電話").first.id
+    where(action_kind_id: ak_id)
+  }
+  scope :guest, lambda {
+    ak_id = ActionKind.where(name: "来客").first.id
+    where(action_kind_id: ak_id)
+  }
 
   validates :name, presence: {message: "活動名は必須です"}
 end
